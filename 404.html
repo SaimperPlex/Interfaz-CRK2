@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <script>
+      // Detecta si vienes de una URL directa como /admin o /editor
+      const redirect = window.location.pathname.replace('/Interfaz-CRK2', '');
+      // Redirige al index.html agregando el parámetro redirect
+      window.location.replace('/Interfaz-CRK2/?redirect=' + redirect);
+    </script>
+  </head>
+  <body></body>
+</html>
