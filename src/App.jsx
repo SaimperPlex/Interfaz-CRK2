@@ -1,48 +1,35 @@
+// src/App.jsx
 import React, { useState, useEffect } from 'react';
 import WelcomeScreen from './components/WelcomeScreen';
 import Editor from './components/Editor';
 import AdminPanel from './components/AdminPanel';
 
 export default function App() {
-  const [currentRoute, setCurrentRoute] = useState('/');
+  const [route, setRoute] = useState('/');
 
   useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const redirectPath = params.get('redirect');
-
-    // Si llegas desde 404.html con un redirect, corrige la URL
-    if (redirectPath) {
-      const newPath = `/Interfaz-CRK2${redirectPath}`;
-      window.history.replaceState({}, '', newPath);
-      setCurrentRoute(newPath);
-    } else {
-      setCurrentRoute(window.location.pathname);
-    }
-
-    // Escucha cambios en la navegación
-    const handleRouteChange = () => {
-      setCurrentRoute(window.location.pathname);
+    const readHash = () => {
+      // Ejemplo: '#/admin' => '/admin'
+      const hash = window.location.hash.replace('#', '') || '/';
+      // Normalizar: permitir '/Interfaz-CRK2/#/admin' ó '#/admin'
+      const normalized = hash.startsWith('/Interfaz-CRK2') ? hash.replace('/Interfaz-CRK2', '') : hash;
+      setRoute(normalized);
     };
 
-    window.addEventListener('popstate', handleRouteChange);
-    return () => window.removeEventListener('popstate', handleRouteChange);
+    readHash();
+    window.addEventListener('hashchange', readHash);
+    return () => window.removeEventListener('hashchange', readHash);
   }, []);
 
-  // Navegación manual
   const navigate = (path) => {
-    window.history.pushState({}, '', path);
-    setCurrentRoute(path);
+    // path puede ser '/admin' o '/Interfaz-CRK2/admin'
+    const short = path.startsWith('/Interfaz-CRK2') ? path.replace('/Interfaz-CRK2', '') : path;
+    window.location.hash = short; // => '#/admin'
+    setRoute(short);
   };
 
-  // Rutas
-  if (currentRoute === '/Interfaz-CRK2/admin') {
-    return <AdminPanel />;
-  }
+  if (route === '/admin') return <AdminPanel />;
+  if (route === '/editor') return <Editor />;
 
-  if (currentRoute === '/Interfaz-CRK2/editor') {
-    return <Editor />;
-  }
-
-  // Ruta por defecto
-  return <WelcomeScreen onEnter={() => navigate('/Interfaz-CRK2/editor')} />;
+  return <WelcomeScreen onEnter={() => navigate('/editor')} />;
 }
