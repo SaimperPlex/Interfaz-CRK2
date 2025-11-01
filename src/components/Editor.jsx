@@ -271,7 +271,9 @@ export default function Editor() {
 
   const goHome = () => {
     if (window.confirm('¿Volver a la pantalla de inicio? Se perderán los cambios no guardados.')) {
-      window.location.href = '/';
+      window.location.href = '/Interfaz-CRK2';
+
+      
     }
   };
 

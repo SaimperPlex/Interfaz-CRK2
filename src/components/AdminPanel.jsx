@@ -213,7 +213,7 @@ export default function AdminPanel() {
       setTimeout(() => {
         setSaved(false);
         // Redirigir al editor después de guardar
-        window.location.href = '/Interfaz-CRK2/editor';
+        window.location.href = '/editor';
       }, 1000);
     } catch (error) {
       console.error('Error:', error);
